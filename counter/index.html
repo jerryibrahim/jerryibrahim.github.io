@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<!-- **********************
+	 Dynamic Counter
+	 Author: @jerryibrahim
+	 **********************
+-->
+
+<html>
+	<head>
+		<style>
+			:root {
+				--number-start: 10213;
+				--number-end: 20000;
+				--duration-time: 3000s;
+				--font-size: 100px;
+				--text-color: white;
+  				--background-color: black;
+			}
+
+			#controls {font: 20 20px system-ui;}
+			input[type="text"] {font-size:20px; padding: 5px 5px; margin-right: 15px;}
+			input[type="button"] {font-size:20px; padding: 5px 5px; margin-right: 5px; margin-bottom: 7px;}
+			input[type="color"] {margin-right: 15px;}
+
+			@property --num {
+			syntax: "<integer>";
+			initial-value: 0;
+			inherits: false;
+			}
+
+			#ticker {
+			animation: counter 1s infinite linear;
+			animation-duration: var(--duration-time);
+			counter-reset: num var(--num);
+			font: 600 var(--font-size) system-ui;
+			padding: 2rem;
+			background: var(--background-color);
+			color: var(--text-color);
+			}
+			#ticker::after {
+			content: counter(num);
+			}
+
+			@keyframes counter {
+			from {
+				--num: var(--number-start);
+			}
+			to {
+				--num: var(--number-end);
+			}
+			}
+		</style>
+		<script>
+		function light(){
+			var bodyStyles = document.body.style;
+			bodyStyles.setProperty('--text-color', 'black');
+			bodyStyles.setProperty('--background-color', 'white');
+			document.getElementById("textColor").value = "#000000"
+			document.getElementById("backgroundColor").value = "#FFFFFF"
+		}
+
+		function dark(){
+			var bodyStyles = document.body.style;
+			bodyStyles.setProperty('--text-color', 'white');
+			bodyStyles.setProperty('--background-color', 'black');
+			document.getElementById("textColor").value = "#FFFFFF"
+			document.getElementById("backgroundColor").value = "#000000"
+		}
+
+		function updateCounter(s){
+			var bodyStyles = document.body.style;
+			var textColor = document.getElementById("textColor").value;
+			var backgroundColor = document.getElementById("backgroundColor").value;
+			var fontSize = parseInt(document.getElementById("fontSize").value)+"px";
+			var durationTime = parseInt(document.getElementById("durationTime").value)+"s";
+			var numberStart = parseInt(document.getElementById("numberStart").value);
+			var numberEnd = parseInt(document.getElementById("numberEnd").value);
+			var cr = ((numberEnd - numberStart) / parseInt(document.getElementById("durationTime").value)*60).toFixed(2) + " count/min";
+			bodyStyles.setProperty('--font-size', fontSize);
+			bodyStyles.setProperty('--text-color', textColor);
+			bodyStyles.setProperty('--background-color', backgroundColor);
+			bodyStyles.setProperty('--duration-time', durationTime);
+			bodyStyles.setProperty('--number-start', numberStart);
+			bodyStyles.setProperty('--number-end', numberEnd);
+			bodyStyles.setProperty('--number-end', numberEnd);
+			bodyStyles.setProperty('--count-rate', "");
+			document.getElementById("rate").innerHTML = cr;
+		}
+		</script>
+	</head>
+	<body>
+		<div id="controls">
+		<input type="button" onclick="light()" value="Light">
+		<input type="button" onclick="dark()" value="Dark">
+		Text: <input type="color" id="textColor" value="#FFFFFF">
+		Background: <input type="color" id="backgroundColor" value="#000000">
+		Size: <input id="fontSize" type="text" value="100" size=5>
+
+		<br>
+
+		Start: <input id="numberStart" type="text" value="10213" size=10>
+		End: <input id="numberEnd" type="text" value="20000" size=10>
+		Duration: <input id="durationTime" type="text" value="3000" size=5>
+		<br><br>
+
+		<input type="button" onclick="updateCounter()" value="Update">
+		<label id="rate">Click "Update" to calculate count/min</label>
+		</div>		
+		<br><br>&nbsp;
+		<div id="ticker"></div>		
+	</body>
+</html>
